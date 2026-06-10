@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import type { PaymentRequest } from "./models.js";
+import type { PaymentRequest } from "./models";
 
 export interface Ap2ClientOptions {
   merchantId: string;

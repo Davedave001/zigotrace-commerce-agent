@@ -1,5 +1,5 @@
-import Anthropic from "@anthropic-ai/sdk";
-import type { Farm, CooperativePackage } from "../types.js";
+﻿import Anthropic from "@anthropic-ai/sdk";
+import type { Farm, CooperativePackage } from "../types";
 
 export interface DeforestationResult {
   farmId: string;
@@ -40,7 +40,7 @@ Respond ONLY with valid JSON:
   "issues": string[]
 }
 
-Set forestLossHa to estimated probable loss (0 if low risk). Be conservative — flag as MEDIUM if uncertain.`;
+Set forestLossHa to estimated probable loss (0 if low risk). Be conservative â€” flag as MEDIUM if uncertain.`;
 
   const response = await client.messages.create({
     model: "claude-haiku-4-5-20251001",

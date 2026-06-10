@@ -1,4 +1,4 @@
-import { submitHcsMessage } from "./hedera.js";
+﻿import { submitHcsMessage } from "./hedera";
 
 export type HcsEventType =
   | "GUARDIAN_START"

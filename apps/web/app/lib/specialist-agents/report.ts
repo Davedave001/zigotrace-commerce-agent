@@ -1,9 +1,9 @@
-import type { EudrReport, FarmVerificationResult } from "../types.js";
-import type { GeolocationResult } from "./geolocation.js";
-import type { DeforestationResult } from "./deforestation.js";
-import type { AgronomyResult } from "./agronomy.js";
-import type { FarmRecordsResult } from "./farm-records.js";
-import type { ComplianceResult } from "./compliance.js";
+﻿import type { EudrReport, FarmVerificationResult } from "../types";
+import type { GeolocationResult } from "./geolocation";
+import type { DeforestationResult } from "./deforestation";
+import type { AgronomyResult } from "./agronomy";
+import type { FarmRecordsResult } from "./farm-records";
+import type { ComplianceResult } from "./compliance";
 
 export function buildReport(params: {
   cooperativeId: string;

@@ -2,8 +2,13 @@
   "name": "@eudr-guardian/ap2",
   "version": "0.1.0",
   "description": "AP2 Agentic Payments Protocol — TypeScript implementation",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "type-check": "tsc --noEmit"

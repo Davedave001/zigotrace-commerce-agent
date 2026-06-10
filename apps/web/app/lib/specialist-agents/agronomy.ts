@@ -1,5 +1,5 @@
-import Anthropic from "@anthropic-ai/sdk";
-import type { Farm } from "../types.js";
+﻿import Anthropic from "@anthropic-ai/sdk";
+import type { Farm } from "../types";
 
 export interface AgronomyResult {
   farmId: string;

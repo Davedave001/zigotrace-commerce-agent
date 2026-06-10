@@ -1,15 +1,15 @@
-import { NextRequest } from "next/server";
-import type { CooperativePackage, AgentEvent } from "../../lib/types.js";
-import { verifyGeolocation } from "../../lib/specialist-agents/geolocation.js";
-import { assessDeforestation } from "../../lib/specialist-agents/deforestation.js";
-import { verifyAgronomy } from "../../lib/specialist-agents/agronomy.js";
-import { validateFarmRecords } from "../../lib/specialist-agents/farm-records.js";
-import { detectCounterfeits } from "../../lib/specialist-agents/counterfeit.js";
-import { scoreCompliance } from "../../lib/specialist-agents/compliance.js";
-import { buildReport } from "../../lib/specialist-agents/report.js";
-import { logToHcs } from "../../lib/hcs-logger.js";
-import { transferHbar, mintTracePassNft } from "../../lib/hedera.js";
-import { DEMO_COOPERATIVE } from "../../lib/demo-data.js";
+﻿import { NextRequest } from "next/server";
+import type { CooperativePackage, AgentEvent } from "../../lib/types";
+import { verifyGeolocation } from "../../lib/specialist-agents/geolocation";
+import { assessDeforestation } from "../../lib/specialist-agents/deforestation";
+import { verifyAgronomy } from "../../lib/specialist-agents/agronomy";
+import { validateFarmRecords } from "../../lib/specialist-agents/farm-records";
+import { detectCounterfeits } from "../../lib/specialist-agents/counterfeit";
+import { scoreCompliance } from "../../lib/specialist-agents/compliance";
+import { buildReport } from "../../lib/specialist-agents/report";
+import { logToHcs } from "../../lib/hcs-logger";
+import { transferHbar, mintTracePassNft } from "../../lib/hedera";
+import { DEMO_COOPERATIVE } from "../../lib/demo-data";
 
 const AGENT_PRICES: Record<string, number> = {
   geolocation: 0.05,
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
           type: "guardian_start",
           timestamp: Date.now(),
           agentId: "guardian",
-          message: `Starting EUDR verification for ${cooperative.cooperativeName} — ${cooperative.farms.length} farms`,
+          message: `Starting EUDR verification for ${cooperative.cooperativeName} â€” ${cooperative.farms.length} farms`,
         });
 
         await logToHcs({ eventType: "GUARDIAN_START", timestamp: Date.now(), sessionId, cooperativeId: cooperative.cooperativeId });
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
           type: "payment_requested",
           timestamp: Date.now(),
           agentId: "geolocation",
-          message: `Requesting GPS polygon verification — ${cooperative.farms.length} farms`,
+          message: `Requesting GPS polygon verification â€” ${cooperative.farms.length} farms`,
           priceHbar: AGENT_PRICES.geolocation * cooperative.farms.length,
         });
 
@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
           type: "agent_result",
           timestamp: Date.now(),
           agentId: "geolocation",
-          message: `GPS verification complete — ${geoResults.filter((r) => r.status === "PASS").length}/${geoResults.length} farms passed`,
+          message: `GPS verification complete â€” ${geoResults.filter((r) => r.status === "PASS").length}/${geoResults.length} farms passed`,
         });
 
         // --- Agent 2: Deforestation ---
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
           type: "agent_result",
           timestamp: Date.now(),
           agentId: "deforestation",
-          message: `Deforestation scan complete — ${defoHigh} HIGH risk farms detected`,
+          message: `Deforestation scan complete â€” ${defoHigh} HIGH risk farms detected`,
         });
 
         // --- Agent 3: Agronomy ---
@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
           type: "agent_result",
           timestamp: Date.now(),
           agentId: "agronomy",
-          message: `Agronomy check complete — ${bannedCount} farms with EU-banned substances`,
+          message: `Agronomy check complete â€” ${bannedCount} farms with EU-banned substances`,
         });
 
         // --- Agent 4: Farm Records ---
@@ -134,7 +134,7 @@ export async function POST(req: NextRequest) {
           type: "agent_result",
           timestamp: Date.now(),
           agentId: "farm-records",
-          message: `Records validation complete — ${recordsResults.filter((r) => r.status === "PASS").length}/${recordsResults.length} farms pass`,
+          message: `Records validation complete â€” ${recordsResults.filter((r) => r.status === "PASS").length}/${recordsResults.length} farms pass`,
         });
 
         // --- Agent 5: Counterfeit ---
@@ -153,8 +153,8 @@ export async function POST(req: NextRequest) {
           timestamp: Date.now(),
           agentId: "counterfeit",
           message: counterfeitResult.volumeAnomalyDetected
-            ? `Volume anomaly detected — ${counterfeitResult.anomalyFactor}x over capacity`
-            : `No volume fraud detected — anomaly factor ${counterfeitResult.anomalyFactor}x`,
+            ? `Volume anomaly detected â€” ${counterfeitResult.anomalyFactor}x over capacity`
+            : `No volume fraud detected â€” anomaly factor ${counterfeitResult.anomalyFactor}x`,
         });
 
         // --- Agent 6: Compliance Scoring ---
@@ -178,7 +178,7 @@ export async function POST(req: NextRequest) {
           type: "compliance_scored",
           timestamp: Date.now(),
           agentId: "compliance",
-          message: `EUDR Readiness Score: ${complianceResult.readinessScore}% — ${complianceResult.readinessBand}`,
+          message: `EUDR Readiness Score: ${complianceResult.readinessScore}% â€” ${complianceResult.readinessBand}`,
         });
 
         await logToHcs({
@@ -217,7 +217,7 @@ export async function POST(req: NextRequest) {
               type: "payment_confirmed",
               timestamp: Date.now(),
               agentId: "guardian",
-              message: `MPP split settled — 0.45 HBAR distributed to 7 agents`,
+              message: `MPP split settled â€” 0.45 HBAR distributed to 7 agents`,
               txId: splitTxId,
             });
           } catch {
@@ -234,7 +234,7 @@ export async function POST(req: NextRequest) {
           priceHbar: AGENT_PRICES.report,
         });
 
-        // TracePass NFT — only if score qualifies
+        // TracePass NFT â€” only if score qualifies
         let tracePassTokenId: string | null = null;
         if (complianceResult.readinessScore >= 65 && process.env.HEDERA_OPERATOR_ID) {
           try {
@@ -284,7 +284,7 @@ export async function POST(req: NextRequest) {
           type: "report_ready",
           timestamp: Date.now(),
           agentId: "report",
-          message: `DDS generated — ${report.ddsReference} | ${report.exportEligibleFarms.length} farms export-eligible`,
+          message: `DDS generated â€” ${report.ddsReference} | ${report.exportEligibleFarms.length} farms export-eligible`,
           report,
         });
       } catch (err) {

@@ -2,8 +2,13 @@
   "name": "@eudr-guardian/mpp",
   "version": "0.1.0",
   "description": "MPP Multi-Party Payments — HTTP 402 gating and 7-way split routing",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "type-check": "tsc --noEmit"

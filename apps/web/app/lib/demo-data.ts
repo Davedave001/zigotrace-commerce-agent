@@ -1,4 +1,4 @@
-import type { CooperativePackage } from "./types.js";
+﻿import type { CooperativePackage } from "./types";
 
 export const DEMO_COOPERATIVE: CooperativePackage = {
   cooperativeId: "ZTC-KE-001",
@@ -98,7 +98,7 @@ export const DEMO_COOPERATIVE: CooperativePackage = {
         { product: "NPK 17-17-17", quantityKg: 100, date: "2025-03-25" },
       ],
       pesticideRecords: [
-        // EU-banned substance — triggers red flag
+        // EU-banned substance â€” triggers red flag
         { product: "Dursban 48EC", activeIngredient: "chlorpyrifos", quantityL: 4 },
       ],
       harvestRecords: [{ quantityKg: 1600, season: "2025-main" }],

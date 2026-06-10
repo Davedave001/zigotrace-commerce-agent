@@ -1,4 +1,4 @@
-import type { ReadinessBand } from "./types.js";
+﻿import type { ReadinessBand } from "./types";
 
 const WEIGHTS = {
   geolocationCompleteness: 0.20,
@@ -10,12 +10,12 @@ const WEIGHTS = {
 };
 
 export interface ScoringInputs {
-  geolocationPassRate: number;    // 0–1
-  deforestationPassRate: number;  // 0–1
-  inputComplianceRate: number;    // 0–1
-  recordsLegalityRate: number;    // 0–1
-  traceabilityRate: number;       // 0–1
-  antifraudScore: number;         // 0–1
+  geolocationPassRate: number;    // 0â€“1
+  deforestationPassRate: number;  // 0â€“1
+  inputComplianceRate: number;    // 0â€“1
+  recordsLegalityRate: number;    // 0â€“1
+  traceabilityRate: number;       // 0â€“1
+  antifraudScore: number;         // 0â€“1
 }
 
 export function computeReadinessScore(inputs: ScoringInputs): number {

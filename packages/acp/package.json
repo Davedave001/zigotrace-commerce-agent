@@ -2,8 +2,13 @@
   "name": "@eudr-guardian/acp",
   "version": "0.1.0",
   "description": "ACP Agentic Commerce Protocol — service catalog and checkout",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "type-check": "tsc --noEmit"

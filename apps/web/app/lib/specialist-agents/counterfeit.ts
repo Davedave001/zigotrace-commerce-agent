@@ -1,5 +1,5 @@
-import Anthropic from "@anthropic-ai/sdk";
-import type { CooperativePackage } from "../types.js";
+﻿import Anthropic from "@anthropic-ai/sdk";
+import type { CooperativePackage } from "../types";
 
 export interface CounterfeitResult {
   cooperativeId: string;
@@ -64,7 +64,7 @@ Respond ONLY with valid JSON:
   "issues": string[]
 }
 
-HIGH risk if anomaly > 2x, MEDIUM if 1.3x–2x, LOW otherwise.`;
+HIGH risk if anomaly > 2x, MEDIUM if 1.3xâ€“2x, LOW otherwise.`;
 
   const response = await client.messages.create({
     model: "claude-haiku-4-5-20251001",

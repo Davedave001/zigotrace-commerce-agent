@@ -1,4 +1,4 @@
-import type { MppSplit } from "./split.js";
+import type { MppSplit } from "./split";
 
 export interface PaymentGateOptions {
   priceHbar: number;
