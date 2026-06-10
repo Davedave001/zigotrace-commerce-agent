@@ -1,0 +1,71 @@
+version: "3.9"
+
+# ── EUDR Guardian — Two-container stack ────────────────────────────────────────
+#
+# Container 1 (api):  Express + Hedera SDK + Anthropic  — port 3001 (internal)
+# Container 2 (web):  Next.js standalone UI              — port 3000 (public)
+#
+# The UI container proxies all /api/* requests to the api container via
+# INTERNAL_API_URL. The api container is never exposed to the internet.
+#
+# Usage (local dev):
+#   cp .env.example .env
+#   docker compose up --build
+#
+# Coolify:
+#   Import this repo as a "Docker Compose" project.
+#   Set env vars in the Coolify environment panel.
+# ────────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── API container ─────────────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: "3001"
+      NODE_ENV: production
+    # Not exposed externally — only reachable inside the Docker network
+    expose:
+      - "3001"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # ── UI container ──────────────────────────────────────────────────────────────
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        # Passed as build arg so next.config.ts can read it if needed
+        INTERNAL_API_URL: http://api:3001
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: "3000"
+      NODE_ENV: production
+      # Runtime env var: Next.js rewrites use this to proxy /api/* → API container
+      INTERNAL_API_URL: http://api:3001
+    ports:
+      - "3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+networks:
+  default:
+    name: eudr-guardian-network

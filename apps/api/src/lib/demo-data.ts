@@ -1,0 +1,83 @@
+import type { CooperativePackage } from "./types.js";
+
+export const DEMO_COOPERATIVE: CooperativePackage = {
+  cooperativeId: "ZTC-KE-001",
+  cooperativeName: "Zigotrace Coffee Cooperative",
+  commodity: "coffee",
+  countryCode: "KE",
+  totalVolumeKg: 84000,
+  farms: [
+    {
+      farmId: "F001", farmerName: "James Mwangi", areaHectares: 2.4,
+      gpsPolygon: [
+        { lat: -0.3031, lng: 36.8024 }, { lat: -0.3031, lng: 36.8074 },
+        { lat: -0.3081, lng: 36.8074 }, { lat: -0.3081, lng: 36.8024 },
+        { lat: -0.3031, lng: 36.8024 },
+      ],
+      fertilizerRecords: [{ product: "CAN (Calcium Ammonium Nitrate)", quantityKg: 120, date: "2025-03-15" }],
+      pesticideRecords: [{ product: "Copper Oxychloride", activeIngredient: "copper oxychloride", quantityL: 8 }],
+      harvestRecords: [{ quantityKg: 1850, season: "2025-main" }],
+    },
+    {
+      farmId: "F002", farmerName: "Mary Wanjiku", areaHectares: 3.1,
+      gpsPolygon: [
+        { lat: -0.3120, lng: 36.8100 }, { lat: -0.3120, lng: 36.8162 },
+        { lat: -0.3182, lng: 36.8162 }, { lat: -0.3182, lng: 36.8100 },
+        { lat: -0.3120, lng: 36.8100 },
+      ],
+      fertilizerRecords: [{ product: "NPK 17-17-17", quantityKg: 155, date: "2025-03-20" }],
+      pesticideRecords: [{ product: "Mancozeb WP", activeIngredient: "mancozeb", quantityL: 12 }],
+      harvestRecords: [{ quantityKg: 2400, season: "2025-main" }],
+    },
+    {
+      farmId: "F003", farmerName: "Peter Kariuki", areaHectares: 1.8,
+      gpsPolygon: [
+        { lat: -0.3200, lng: 36.8200 }, { lat: -0.3200, lng: 36.8236 },
+        { lat: -0.3236, lng: 36.8236 }, { lat: -0.3236, lng: 36.8200 },
+        { lat: -0.3200, lng: 36.8200 },
+      ],
+      fertilizerRecords: [{ product: "Urea 46%", quantityKg: 90, date: "2025-04-01" }],
+      pesticideRecords: [{ product: "Copper Oxychloride", activeIngredient: "copper oxychloride", quantityL: 6 }],
+      harvestRecords: [{ quantityKg: 1400, season: "2025-main" }],
+    },
+    {
+      farmId: "F004", farmerName: "Grace Njeri", areaHectares: 4.2,
+      gpsPolygon: [
+        { lat: -0.2900, lng: 36.7950 }, { lat: -0.2900, lng: 36.8034 },
+        { lat: -0.2984, lng: 36.8034 }, { lat: -0.2984, lng: 36.7950 },
+        { lat: -0.2900, lng: 36.7950 },
+      ],
+      fertilizerRecords: [
+        { product: "CAN (Calcium Ammonium Nitrate)", quantityKg: 210, date: "2025-03-10" },
+        { product: "Potassium Sulphate", quantityKg: 80, date: "2025-04-05" },
+      ],
+      pesticideRecords: [{ product: "Trichoderma Bio-fungicide", activeIngredient: "trichoderma harzianum", quantityL: 15 }],
+      harvestRecords: [{ quantityKg: 3200, season: "2025-main" }],
+    },
+    {
+      farmId: "F005", farmerName: "David Ochieng", areaHectares: 2.0,
+      gpsPolygon: [
+        { lat: -0.3300, lng: 36.8300 }, { lat: -0.3300, lng: 36.8340 },
+        { lat: -0.3340, lng: 36.8340 }, { lat: -0.3340, lng: 36.8300 },
+        { lat: -0.3300, lng: 36.8300 },
+      ],
+      fertilizerRecords: [{ product: "NPK 17-17-17", quantityKg: 100, date: "2025-03-25" }],
+      pesticideRecords: [{ product: "Dursban 48EC", activeIngredient: "chlorpyrifos", quantityL: 4 }],
+      harvestRecords: [{ quantityKg: 1600, season: "2025-main" }],
+    },
+    {
+      farmId: "F006", farmerName: "Alice Kamau", areaHectares: 5.5,
+      gpsPolygon: [
+        { lat: -0.2800, lng: 36.7800 }, { lat: -0.2800, lng: 36.7910 },
+        { lat: -0.2910, lng: 36.7910 }, { lat: -0.2910, lng: 36.7800 },
+        { lat: -0.2800, lng: 36.7800 },
+      ],
+      fertilizerRecords: [
+        { product: "CAN (Calcium Ammonium Nitrate)", quantityKg: 275, date: "2025-03-12" },
+        { product: "Potassium Sulphate", quantityKg: 80, date: "2025-04-05" },
+      ],
+      pesticideRecords: [{ product: "Copper Oxychloride", activeIngredient: "copper oxychloride", quantityL: 18 }],
+      harvestRecords: [{ quantityKg: 4200, season: "2025-main" }],
+    },
+  ],
+};

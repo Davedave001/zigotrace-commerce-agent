@@ -1,0 +1,31 @@
+{
+  "name": "@eudr-guardian/api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.36.3",
+    "@eudr-guardian/acp": "*",
+    "@eudr-guardian/ap2": "*",
+    "@eudr-guardian/mpp": "*",
+    "@hashgraph/sdk": "^2.81.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "uuid": "^10.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22",
+    "@types/uuid": "^10.0.0",
+    "esbuild": "^0.24.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}
