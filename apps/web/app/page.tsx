@@ -2,50 +2,36 @@
 
 import { useState } from "react";
 import { UploadPanel } from "./components/UploadPanel";
+import { ScanLookupPanel } from "./components/ScanLookupPanel";
 import { AgentActivityFeed } from "./components/AgentActivityFeed";
 import { EUDRReportPanel } from "./components/EUDRReportPanel";
+import { RemediationReportPanel } from "./components/RemediationReportPanel";
 import { WalletWidget } from "./components/WalletWidget";
-import type { AgentEvent } from "./lib/types";
-import type { EudrReport } from "./lib/types";
+import type { AgentEvent, EudrReport, RemediationReport } from "./lib/types";
+
+type Tab = "verify" | "remediate";
 
 export default function HomePage() {
+  const [tab, setTab] = useState<Tab>("verify");
   const [events, setEvents] = useState<AgentEvent[]>([]);
   const [report, setReport] = useState<EudrReport | null>(null);
+  const [remediationReport, setRemediationReport] = useState<RemediationReport | null>(null);
   const [running, setRunning] = useState(false);
   const [walletAccount, setWalletAccount] = useState<string | null>(null);
 
-  async function handleSubmit(payload: FormData) {
+  async function streamSse(endpoint: string, body: Record<string, unknown>) {
     setRunning(true);
     setEvents([]);
     setReport(null);
+    setRemediationReport(null);
 
-    // Express only parses application/json — convert FormData to JSON
-    let jsonBody: Record<string, unknown>;
-    const demo = payload.get("demo");
-    const packageFile = payload.get("package");
-
-    if (demo === "true") {
-      jsonBody = { demo: true };
-    } else if (packageFile instanceof File) {
-      try {
-        jsonBody = { package: JSON.parse(await packageFile.text()) };
-      } catch {
-        alert("Invalid JSON file.");
-        setRunning(false);
-        return;
-      }
-    } else {
-      setRunning(false);
-      return;
-    }
-
-    const res = await fetch("/api/guardian", {
+    const res = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(jsonBody),
+      body: JSON.stringify(body),
     });
 
-    if (!res.body) return;
+    if (!res.body) { setRunning(false); return; }
 
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
@@ -63,6 +49,9 @@ export default function HomePage() {
           if (event.type === "report_ready") {
             setReport(event.report as EudrReport);
           }
+          if (event.type === "remediation_report_ready") {
+            setRemediationReport(event.remediationReport as RemediationReport);
+          }
         } catch {
           // partial chunk — ignore
         }
@@ -70,6 +59,31 @@ export default function HomePage() {
     }
 
     setRunning(false);
+  }
+
+  async function handleVerify(payload: FormData) {
+    let jsonBody: Record<string, unknown>;
+    const demo = payload.get("demo");
+    const packageFile = payload.get("package");
+
+    if (demo === "true") {
+      jsonBody = { demo: true };
+    } else if (packageFile instanceof File) {
+      try {
+        jsonBody = { package: JSON.parse(await packageFile.text()) };
+      } catch {
+        alert("Invalid JSON file.");
+        return;
+      }
+    } else {
+      return;
+    }
+
+    await streamSse("/api/guardian", jsonBody);
+  }
+
+  async function handleScanLookup(submissionId: string) {
+    await streamSse("/api/remediation/from-scan", { submissionId });
   }
 
   return (
@@ -83,11 +97,41 @@ export default function HomePage() {
         <WalletWidget account={walletAccount} onConnect={setWalletAccount} />
       </header>
 
+      {/* Tab switcher */}
+      <div className="max-w-7xl mx-auto px-6 pt-6">
+        <div className="inline-flex bg-white border border-gray-200 rounded-lg p-1 gap-1">
+          <button
+            onClick={() => setTab("verify")}
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              tab === "verify"
+                ? "bg-[#1a6b3c] text-white"
+                : "text-gray-500 hover:text-gray-800"
+            }`}
+          >
+            Farm Verification
+          </button>
+          <button
+            onClick={() => setTab("remediate")}
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              tab === "remediate"
+                ? "bg-[#1a6b3c] text-white"
+                : "text-gray-500 hover:text-gray-800"
+            }`}
+          >
+            Remediate Scan
+          </button>
+        </div>
+      </div>
+
       {/* Main layout */}
-      <main className="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left: upload */}
+      <main className="max-w-7xl mx-auto px-6 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left: input panel */}
         <div className="lg:col-span-1">
-          <UploadPanel onSubmit={handleSubmit} running={running} />
+          {tab === "verify" ? (
+            <UploadPanel onSubmit={handleVerify} running={running} />
+          ) : (
+            <ScanLookupPanel onLookup={handleScanLookup} running={running} />
+          )}
         </div>
 
         {/* Center: agent feed */}
@@ -95,9 +139,13 @@ export default function HomePage() {
           <AgentActivityFeed events={events} running={running} />
         </div>
 
-        {/* Right: EUDR report */}
+        {/* Right: report */}
         <div className="lg:col-span-1">
-          <EUDRReportPanel report={report} />
+          {tab === "verify" ? (
+            <EUDRReportPanel report={report} />
+          ) : (
+            <RemediationReportPanel report={remediationReport} />
+          )}
         </div>
       </main>
     </div>

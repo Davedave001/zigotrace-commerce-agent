@@ -28,6 +28,7 @@ const EVENT_COLORS: Record<AgentEvent["type"], string> = {
   agent_error: "text-red-600",
   compliance_scored: "text-purple-600",
   report_ready: "text-[#1a6b3c] font-semibold",
+  remediation_report_ready: "text-[#1a6b3c] font-semibold",
   nft_minted: "text-indigo-600",
 };
 

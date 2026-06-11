@@ -39,6 +39,36 @@ export interface CooperativePackage {
   farms: Farm[];
 }
 
+export interface DimensionScore {
+  pct: number;
+  level: string;
+  redFlags?: string[];
+}
+
+export interface CorrectiveAction {
+  dimension: string;
+  score: number;
+  level: string;
+  priorityActions: string[];
+  zigotraceService: string;
+  serviceLink: string;
+  hbarCharged: number;
+}
+
+export interface RemediationReport {
+  submissionId: string;
+  overallScore: number;
+  overallLevel: string;
+  totalHbarCharged: number;
+  hcsTxId: string | undefined;
+  tracePassTokenId: string | null;
+  correctiveActions: CorrectiveAction[];
+  summaryStatement: string;
+  generatedAt: string;
+  ddsReference: string;
+  submittedName?: string;
+}
+
 export interface AgentEvent {
   type:
     | "guardian_start"
@@ -49,6 +79,7 @@ export interface AgentEvent {
     | "agent_error"
     | "compliance_scored"
     | "report_ready"
+    | "remediation_report_ready"
     | "nft_minted";
   timestamp: number;
   agentId?: string;
@@ -57,6 +88,7 @@ export interface AgentEvent {
   priceHbar?: number;
   txId?: string;
   report?: EudrReport;
+  remediationReport?: RemediationReport;
   tokenId?: string;
 }
 

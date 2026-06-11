@@ -199,7 +199,8 @@ export async function buildRemediationReport(
   overallLevel: string,
   actions: CorrectiveAction[],
   hcsTxId: string | undefined,
-  tracePassTokenId: string | null
+  tracePassTokenId: string | null,
+  submittedName?: string,
 ): Promise<RemediationReport> {
   const totalHbar = actions.reduce((sum, a) => sum + a.hbarCharged, 0) + 0.15;
   const topGap = [...actions].sort((a, b) => a.score - b.score)[0];
@@ -222,6 +223,7 @@ Keep it direct and action-oriented. Return ONLY a JSON array with 1 string.`,
     summaryStatement: summary[0] ?? "",
     generatedAt: new Date().toISOString(),
     ddsReference: `ZT-REM-${submissionId.slice(0, 8).toUpperCase()}`,
+    submittedName,
   };
 }
 
@@ -236,4 +238,5 @@ export interface RemediationReport {
   summaryStatement: string;
   generatedAt: string;
   ddsReference: string;
+  submittedName?: string;
 }
