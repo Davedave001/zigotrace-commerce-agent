@@ -15,7 +15,7 @@ const LEVEL_COLOR: Record<string, string> = {
 
 function ScoreGauge({ score }: { score: number }) {
   const color =
-    score >= 85 ? "#1a6b3c" :
+    score >= 85 ? "#4B0082" :
     score >= 65 ? "#d97706" :
     score >= 40 ? "#ea580c" :
     "#dc2626";
@@ -41,7 +41,7 @@ function ScoreGauge({ score }: { score: number }) {
 function ActionCard({ action }: { action: CorrectiveAction }) {
   const pct = action.score;
   const barColor =
-    pct >= 70 ? "#1a6b3c" :
+    pct >= 70 ? "#4B0082" :
     pct >= 50 ? "#d97706" :
     pct >= 30 ? "#ea580c" :
     "#dc2626";
@@ -62,7 +62,7 @@ function ActionCard({ action }: { action: CorrectiveAction }) {
       <ol className="space-y-1">
         {action.priorityActions.map((step, i) => (
           <li key={i} className="text-xs text-gray-700 flex gap-2">
-            <span className="text-[#1a6b3c] font-bold shrink-0">{i + 1}.</span>
+            <span className="text-[#4B0082] font-bold shrink-0">{i + 1}.</span>
             <span>{step}</span>
           </li>
         ))}
@@ -73,7 +73,7 @@ function ActionCard({ action }: { action: CorrectiveAction }) {
         href={action.serviceLink}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-between w-full text-xs bg-[#f0f9f4] hover:bg-[#e0f4ea] text-[#1a6b3c] font-medium px-3 py-2 rounded-lg transition-colors"
+        className="flex items-center justify-between w-full text-xs bg-[#f0f9f4] hover:bg-[#e0f4ea] text-[#4B0082] font-medium px-3 py-2 rounded-lg transition-colors"
       >
         <span>{action.zigotraceService}</span>
         <span className="font-mono">{action.hbarCharged} HBAR →</span>
@@ -141,12 +141,12 @@ export function RemediationReportPanel({ report }: Props) {
         <div className="pt-2 border-t border-gray-100 space-y-1 text-xs">
           <div className="flex justify-between">
             <span className="text-gray-400">Total HBAR charged</span>
-            <span className="font-mono font-semibold text-[#1a6b3c]">{report.totalHbarCharged} HBAR</span>
+            <span className="font-mono font-semibold text-[#4B0082]">{report.totalHbarCharged} HBAR</span>
           </div>
           {report.hcsTxId && (
             <div className="flex justify-between">
               <span className="text-gray-400">Hedera TX</span>
-              <span className="font-mono text-[#1a6b3c] truncate max-w-[160px]">{report.hcsTxId}</span>
+              <span className="font-mono text-[#4B0082] truncate max-w-[160px]">{report.hcsTxId}</span>
             </div>
           )}
           {report.tracePassTokenId && (

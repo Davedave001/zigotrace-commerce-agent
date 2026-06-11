@@ -13,7 +13,7 @@ const STATUS_ICON: Record<string, string> = {
 };
 
 const BAND_COLOR: Record<string, string> = {
-  "Advanced Readiness": "text-green-700 bg-green-50",
+  "Advanced Readiness": "text-[#4B0082] bg-purple-50",
   "Intermediate Readiness": "text-amber-700 bg-amber-50",
   "Basic Readiness": "text-orange-700 bg-orange-50",
   "Critical Gaps": "text-red-700 bg-red-50",
@@ -22,7 +22,7 @@ const BAND_COLOR: Record<string, string> = {
 function ScoreGauge({ score }: { score: number }) {
   const color =
     score >= 85
-      ? "#1a6b3c"
+      ? "#4B0082"
       : score >= 65
       ? "#d97706"
       : score >= 40
@@ -129,7 +129,7 @@ export function EUDRReportPanel({ report }: Props) {
             <ul className="space-y-1">
               {report.recommendations.map((rec, i) => (
                 <li key={i} className="text-xs text-gray-700 flex gap-2">
-                  <span className="text-[#1a6b3c]">{i + 1}.</span> {rec}
+                  <span className="text-[#4B0082]">{i + 1}.</span> {rec}
                 </li>
               ))}
             </ul>
@@ -152,7 +152,7 @@ export function EUDRReportPanel({ report }: Props) {
         <div className="pt-2 border-t border-gray-100 space-y-1 text-xs">
           <div className="flex justify-between">
             <span className="text-gray-400">HCS Audit Topic</span>
-            <span className="font-mono text-[#1a6b3c]">{report.hcsTopicId}</span>
+            <span className="font-mono text-[#4B0082]">{report.hcsTopicId}</span>
           </div>
           {report.tracePassTokenId && (
             <div className="flex justify-between">

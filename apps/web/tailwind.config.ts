@@ -9,10 +9,20 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          green: "#1a6b3c",
-          earth: "#7c5c2e",
-          sky: "#1e4d8c",
+          purple: "#4B0082",
+          "purple-hover": "#3A0066",
         },
+      },
+      fontFamily: {
+        sans: [
+          "Avenir Next",
+          "Avenir",
+          "system-ui",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "sans-serif",
+        ],
       },
     },
   },

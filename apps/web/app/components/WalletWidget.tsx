@@ -17,7 +17,7 @@ export function WalletWidget({ account, onConnect }: Props) {
     return (
       <button
         onClick={handleConnect}
-        className="px-4 py-2 rounded-lg bg-[#1a6b3c] text-white text-sm font-medium hover:bg-[#145530] transition-colors"
+        className="px-4 py-2 rounded-lg bg-white/15 text-white text-sm font-medium hover:bg-white/25 border border-white/30 transition-colors"
       >
         Connect Wallet
       </button>

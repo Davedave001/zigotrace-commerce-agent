@@ -42,7 +42,7 @@ export function UploadPanel({ onSubmit, running }: Props) {
           className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
             useDemo
               ? "border-gray-200 bg-gray-50 opacity-50 cursor-not-allowed"
-              : "border-gray-300 hover:border-[#1a6b3c] hover:bg-green-50"
+              : "border-gray-300 hover:border-[#4B0082] hover:bg-green-50"
           }`}
         >
           <input
@@ -54,7 +54,7 @@ export function UploadPanel({ onSubmit, running }: Props) {
             disabled={useDemo}
           />
           {fileName ? (
-            <p className="text-sm text-[#1a6b3c] font-medium">{fileName}</p>
+            <p className="text-sm text-[#4B0082] font-medium">{fileName}</p>
           ) : (
             <>
               <p className="text-sm text-gray-600">Drop cooperative JSON here</p>
@@ -72,7 +72,7 @@ export function UploadPanel({ onSubmit, running }: Props) {
               setUseDemo(e.target.checked);
               setFileName(null);
             }}
-            className="w-4 h-4 accent-[#1a6b3c]"
+            className="w-4 h-4 accent-[#4B0082]"
           />
           <span className="text-sm text-gray-700">
             Use Zigotrace Coffee Cooperative demo dataset
@@ -83,7 +83,7 @@ export function UploadPanel({ onSubmit, running }: Props) {
         <button
           type="submit"
           disabled={running}
-          className="w-full py-3 rounded-lg bg-[#1a6b3c] text-white font-medium text-sm hover:bg-[#145530] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full py-3 rounded-lg bg-[#4B0082] text-white font-medium text-sm hover:bg-[#3A0066] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {running ? "Running verification..." : "Start EUDR Verification"}
         </button>
@@ -106,12 +106,12 @@ export function UploadPanel({ onSubmit, running }: Props) {
           ].map(([label, price]) => (
             <div key={label} className="flex justify-between">
               <span>{label}</span>
-              <span className="font-mono text-[#1a6b3c]">{price}</span>
+              <span className="font-mono text-[#4B0082]">{price}</span>
             </div>
           ))}
           <div className="flex justify-between font-semibold pt-1 border-t border-gray-100">
             <span>Full verification (MPP split)</span>
-            <span className="font-mono text-[#1a6b3c]">0.45 HBAR</span>
+            <span className="font-mono text-[#4B0082]">0.45 HBAR</span>
           </div>
         </div>
       </div>

@@ -3,12 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --background: #f8f7f4;
-  --foreground: #1a1a1a;
+  --background: #ffffff;
+  --foreground: #000000;
+  --brand: #4B0082;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
 }

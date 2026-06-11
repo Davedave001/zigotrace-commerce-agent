@@ -23,7 +23,7 @@ export function ScanLookupPanel({ onLookup, running, initialId = "" }: Props) {
       <h2 className="text-base font-semibold text-gray-900 mb-1">Remediate from EUDR Scan</h2>
       <p className="text-xs text-gray-500 mb-4">
         Enter your ZigoTrace scan report ID. Guardian fetches your compliance gaps from{" "}
-        <a href="https://zigotrace.com/eudr-scan" target="_blank" rel="noopener noreferrer" className="text-[#1a6b3c] underline">
+        <a href="https://zigotrace.com/eudr-scan" target="_blank" rel="noopener noreferrer" className="text-[#4B0082] underline">
           zigotrace.com/eudr-scan
         </a>{" "}
         and builds an AI-powered remediation plan charged via HBAR.
@@ -40,7 +40,7 @@ export function ScanLookupPanel({ onLookup, running, initialId = "" }: Props) {
             onChange={(e) => setSubmissionId(e.target.value)}
             placeholder="e.g. 42"
             disabled={running}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a6b3c] focus:border-transparent disabled:opacity-50"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#4B0082] focus:border-transparent disabled:opacity-50"
           />
           <p className="text-xs text-gray-400 mt-1">
             {initialId
@@ -52,7 +52,7 @@ export function ScanLookupPanel({ onLookup, running, initialId = "" }: Props) {
         <button
           type="submit"
           disabled={running || !submissionId.trim()}
-          className="w-full py-3 rounded-lg bg-[#1a6b3c] text-white font-medium text-sm hover:bg-[#145530] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full py-3 rounded-lg bg-[#4B0082] text-white font-medium text-sm hover:bg-[#3A0066] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {running ? "Fetching & analysing..." : "Get Remediation Plan"}
         </button>
@@ -73,12 +73,12 @@ export function ScanLookupPanel({ onLookup, running, initialId = "" }: Props) {
           ].map(([label, price]) => (
             <div key={label} className="flex justify-between">
               <span>{label}</span>
-              <span className="font-mono text-[#1a6b3c]">{price}</span>
+              <span className="font-mono text-[#4B0082]">{price}</span>
             </div>
           ))}
           <div className="flex justify-between font-semibold pt-1 border-t border-gray-100">
             <span>Max total (all 4 gaps)</span>
-            <span className="font-mono text-[#1a6b3c]">0.56 HBAR</span>
+            <span className="font-mono text-[#4B0082]">0.56 HBAR</span>
           </div>
         </div>
       </div>

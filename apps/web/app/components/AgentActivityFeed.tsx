@@ -24,11 +24,11 @@ const EVENT_COLORS: Record<AgentEvent["type"], string> = {
   payment_requested: "text-amber-600",
   payment_confirmed: "text-green-600",
   agent_start: "text-blue-600",
-  agent_result: "text-[#1a6b3c]",
+  agent_result: "text-[#4B0082]",
   agent_error: "text-red-600",
   compliance_scored: "text-purple-600",
-  report_ready: "text-[#1a6b3c] font-semibold",
-  remediation_report_ready: "text-[#1a6b3c] font-semibold",
+  report_ready: "text-[#4B0082] font-semibold",
+  remediation_report_ready: "text-[#4B0082] font-semibold",
   nft_minted: "text-indigo-600",
 };
 
@@ -48,8 +48,8 @@ export function AgentActivityFeed({ events, running }: Props) {
       <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
         <h2 className="text-base font-semibold text-gray-900">Agent Activity</h2>
         {running && (
-          <span className="flex items-center gap-2 text-xs text-[#1a6b3c]">
-            <span className="h-2 w-2 rounded-full bg-[#1a6b3c] animate-pulse" />
+          <span className="flex items-center gap-2 text-xs text-[#4B0082]">
+            <span className="h-2 w-2 rounded-full bg-[#4B0082] animate-pulse" />
             Running
           </span>
         )}
