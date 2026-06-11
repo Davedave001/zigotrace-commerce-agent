@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { UploadPanel } from "./components/UploadPanel";
 import { ScanLookupPanel } from "./components/ScanLookupPanel";
 import { AgentActivityFeed } from "./components/AgentActivityFeed";
@@ -11,8 +12,12 @@ import type { AgentEvent, EudrReport, RemediationReport } from "./lib/types";
 
 type Tab = "verify" | "remediate";
 
-export default function HomePage() {
-  const [tab, setTab] = useState<Tab>("verify");
+// Inner component — uses useSearchParams() which requires Suspense above it
+function HomeContent() {
+  const searchParams = useSearchParams();
+  const scanParam = searchParams.get("scan") ?? "";
+
+  const [tab, setTab] = useState<Tab>(scanParam ? "remediate" : "verify");
   const [events, setEvents] = useState<AgentEvent[]>([]);
   const [report, setReport] = useState<EudrReport | null>(null);
   const [remediationReport, setRemediationReport] = useState<RemediationReport | null>(null);
@@ -130,7 +135,11 @@ export default function HomePage() {
           {tab === "verify" ? (
             <UploadPanel onSubmit={handleVerify} running={running} />
           ) : (
-            <ScanLookupPanel onLookup={handleScanLookup} running={running} />
+            <ScanLookupPanel
+              onLookup={handleScanLookup}
+              running={running}
+              initialId={scanParam}
+            />
           )}
         </div>
 
@@ -149,5 +158,18 @@ export default function HomePage() {
         </div>
       </main>
     </div>
+  );
+}
+
+// Outer shell — wraps HomeContent in Suspense (required by useSearchParams in App Router)
+export default function HomePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#f8f7f4] flex items-center justify-center">
+        <p className="text-gray-400 text-sm">Loading...</p>
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }

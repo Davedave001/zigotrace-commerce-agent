@@ -5,10 +5,11 @@ import { useState } from "react";
 interface Props {
   onLookup: (submissionId: string) => Promise<void>;
   running: boolean;
+  initialId?: string;
 }
 
-export function ScanLookupPanel({ onLookup, running }: Props) {
-  const [submissionId, setSubmissionId] = useState("");
+export function ScanLookupPanel({ onLookup, running, initialId = "" }: Props) {
+  const [submissionId, setSubmissionId] = useState(initialId);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -42,7 +43,9 @@ export function ScanLookupPanel({ onLookup, running }: Props) {
             className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a6b3c] focus:border-transparent disabled:opacity-50"
           />
           <p className="text-xs text-gray-400 mt-1">
-            Find your ID on the report page at zigotrace.com/eudr-scan after completing the questionnaire.
+            {initialId
+              ? "ID pre-filled from your scan report email. Click below to start."
+              : "Find your Report ID in the results email from zigotrace.com/eudr-scan."}
           </p>
         </div>
 
