@@ -7,7 +7,7 @@ Internet
     │
     ▼
 Nginx (host, port 80/443)
-    ├── commerce-agent.zigotrace.com     → localhost:3000  (web container)
+    ├── commerce-agent.zigotrace.com     → localhost:3002  (web container)
     └── api-commerce-agent.zigotrace.com → localhost:3001  (api container)
 ```
 
@@ -130,7 +130,7 @@ docker compose ps
 curl http://localhost:3001/health
 # → {"status":"ok","service":"eudr-guardian-api"}
 
-curl http://localhost:3000
+curl http://localhost:3002
 # → 200 HTML
 ```
 
@@ -154,7 +154,7 @@ server {
     server_name commerce-agent.zigotrace.com;
 
     location / {
-        proxy_pass         http://localhost:3000;
+        proxy_pass         http://localhost:3002;
         proxy_http_version 1.1;
         proxy_set_header   Upgrade $http_upgrade;
         proxy_set_header   Connection 'upgrade';
