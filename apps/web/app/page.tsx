@@ -36,6 +36,15 @@ function HomeContent() {
       body: JSON.stringify(body),
     });
 
+    if (!res.ok) {
+      const raw = await res.text();
+      let msg = `Error ${res.status}`;
+      try { msg = (JSON.parse(raw) as { error?: string }).error ?? msg; } catch { msg = raw || msg; }
+      setEvents([{ type: "agent_error", timestamp: Date.now(), message: msg }]);
+      setRunning(false);
+      return;
+    }
+
     if (!res.body) { setRunning(false); return; }
 
     const reader = res.body.getReader();
