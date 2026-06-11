@@ -13,6 +13,21 @@ import {
   TopicCreateTransaction,
 } from "@hashgraph/sdk";
 import * as fs from "fs";
+import * as path from "path";
+
+// Load .env from repo root if env vars aren't already set
+const envPath = path.resolve(process.cwd(), ".env");
+if (fs.existsSync(envPath)) {
+  for (const line of fs.readFileSync(envPath, "utf8").split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const eqIdx = trimmed.indexOf("=");
+    if (eqIdx === -1) continue;
+    const key = trimmed.slice(0, eqIdx).trim();
+    const val = trimmed.slice(eqIdx + 1).trim();
+    if (key && !(key in process.env)) process.env[key] = val;
+  }
+}
 
 async function main() {
   const operatorId = process.env.HEDERA_OPERATOR_ID;
@@ -42,13 +57,15 @@ async function main() {
   console.log("\nAdd this to your .env.local:");
   console.log(`HCS_EUDR_TOPIC_ID=${topicId}`);
 
-  // Append to .env.local if it exists
-  const envPath = "apps/web/.env.local";
-  if (fs.existsSync(envPath)) {
-    const current = fs.readFileSync(envPath, "utf8");
+  // Append to root .env if not already set
+  const rootEnv = path.resolve(process.cwd(), ".env");
+  if (fs.existsSync(rootEnv)) {
+    const current = fs.readFileSync(rootEnv, "utf8");
     if (!current.includes("HCS_EUDR_TOPIC_ID")) {
-      fs.appendFileSync(envPath, `\nHCS_EUDR_TOPIC_ID=${topicId}\n`);
-      console.log(`\nAlso appended to ${envPath}`);
+      fs.appendFileSync(rootEnv, `\nHCS_EUDR_TOPIC_ID=${topicId}\n`);
+      console.log(`\nAppended to .env`);
+    } else {
+      console.log("\nHCS_EUDR_TOPIC_ID already in .env — update it manually if needed.");
     }
   }
 
