@@ -1,0 +1,68 @@
+version: "3.9"
+
+# ── EUDR Guardian — Production deploy compose ──────────────────────────────────
+#
+# Uses pre-built images from Docker Hub (built by GitHub Actions on every push).
+# No source code needed on the VPS — Docker Manager pulls images directly.
+#
+# Hostinger Docker Manager → Compose from URL:
+#   https://raw.githubusercontent.com/Davedave001/zigotrace-commerce-agent/master/docker-compose.deploy.yml
+#
+# Set these env vars in Docker Manager → Project → Environment:
+#   DOCKERHUB_USERNAME, HEDERA_OPERATOR_ID, HEDERA_OPERATOR_KEY,
+#   HCS_EUDR_TOPIC_ID, *_ACCOUNT x7, ANTHROPIC_API_KEY,
+#   CORS_ORIGIN, APP_URL
+# ────────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  api:
+    image: ${DOCKERHUB_USERNAME}/eudr-guardian-api:latest
+    restart: unless-stopped
+    environment:
+      PORT: "3001"
+      NODE_ENV: production
+      HEDERA_OPERATOR_ID: ${HEDERA_OPERATOR_ID}
+      HEDERA_OPERATOR_KEY: ${HEDERA_OPERATOR_KEY}
+      HEDERA_NETWORK: ${HEDERA_NETWORK:-testnet}
+      HCS_EUDR_TOPIC_ID: ${HCS_EUDR_TOPIC_ID}
+      GEOLOCATION_ACCOUNT: ${GEOLOCATION_ACCOUNT}
+      DEFORESTATION_ACCOUNT: ${DEFORESTATION_ACCOUNT}
+      AGRONOMY_ACCOUNT: ${AGRONOMY_ACCOUNT}
+      FARM_RECORDS_ACCOUNT: ${FARM_RECORDS_ACCOUNT}
+      COUNTERFEIT_ACCOUNT: ${COUNTERFEIT_ACCOUNT}
+      COMPLIANCE_ACCOUNT: ${COMPLIANCE_ACCOUNT}
+      REPORT_ACCOUNT: ${REPORT_ACCOUNT}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      CORS_ORIGIN: ${CORS_ORIGIN:-*}
+    ports:
+      - "3001:3001"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  web:
+    image: ${DOCKERHUB_USERNAME}/eudr-guardian-web:latest
+    restart: unless-stopped
+    environment:
+      PORT: "3000"
+      NODE_ENV: production
+      INTERNAL_API_URL: http://api:3001
+    ports:
+      - "3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+networks:
+  default:
+    name: eudr-guardian-network
