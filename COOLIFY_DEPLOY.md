@@ -1,150 +1,315 @@
-# EUDR Guardian — Coolify Deployment Guide
+# EUDR Guardian — VPS Deployment Guide
 
-Deploy two containers on Hostinger VPS using Coolify's Docker Compose stack.
+Two containers on Hostinger Ubuntu 24.04 VPS (IP `187.124.35.209`) with Nginx reverse proxy.
 
----
-
-## Prerequisites
-
-- Hostinger VPS with Coolify installed ([coolify.io/docs](https://coolify.io/docs/installation))
-- Domain or subdomain pointed at the VPS IP
-- Hedera testnet account IDs + operator private key
-- Anthropic API key
-
----
-
-## Step 1 — Create a new Coolify project
-
-1. Open Coolify dashboard → **Projects** → **New Project**
-2. Name it `eudr-guardian`
+```
+Internet
+    │
+    ▼
+Nginx (host, port 80/443)
+    ├── commerce-agent.zigotrace.com     → localhost:3000  (web container)
+    └── api-commerce-agent.zigotrace.com → localhost:3001  (api container)
+```
 
 ---
 
-## Step 2 — Add a Docker Compose resource
+## Step 0 — DNS records
 
-1. In the project → **New Resource** → **Docker Compose**
-2. Source: **Git Repository**
-3. Repository: `https://github.com/Davedave001/zigotrace-commerce-agent`
-4. Branch: `master`
-5. Compose file path: `docker-compose.yml`
-6. Click **Save**
+In your DNS provider (Hostinger Domains or wherever `zigotrace.com` is managed), add two A records:
 
----
+| Name | Type | Value |
+|---|---|---|
+| `commerce-agent` | A | `187.124.35.209` |
+| `api-commerce-agent` | A | `187.124.35.209` |
 
-## Step 3 — Set environment variables
-
-In the Coolify resource → **Environment Variables**, add every variable from `.env.example`:
-
-| Variable | Value |
-|---|---|
-| `HEDERA_OPERATOR_ID` | `0.0.XXXXX` — your testnet account |
-| `HEDERA_OPERATOR_KEY` | `302e...` — ED25519 private key |
-| `HEDERA_NETWORK` | `testnet` |
-| `HCS_EUDR_TOPIC_ID` | Run `npx tsx scripts/setup-hedera.ts` locally first |
-| `GEOLOCATION_ACCOUNT` | `0.0.XXXXX` |
-| `DEFORESTATION_ACCOUNT` | `0.0.XXXXX` |
-| `AGRONOMY_ACCOUNT` | `0.0.XXXXX` |
-| `FARM_RECORDS_ACCOUNT` | `0.0.XXXXX` |
-| `COUNTERFEIT_ACCOUNT` | `0.0.XXXXX` |
-| `COMPLIANCE_ACCOUNT` | `0.0.XXXXX` |
-| `REPORT_ACCOUNT` | `0.0.XXXXX` |
-| `ANTHROPIC_API_KEY` | `sk-ant-...` |
-| `INTERNAL_API_URL` | `http://api:3001` — keep this exact value |
-| `CORS_ORIGIN` | `https://your-domain.com` |
-| `APP_URL` | `https://your-domain.com` |
-
-> The 7 specialist accounts can all be the same account for testing. For production each agent should have its own account so the MPP split is visible on the explorer.
+Wait for DNS propagation (usually < 5 min on Hostinger).
 
 ---
 
-## Step 4 — Configure the domain
+## Step 1 — SSH into VPS
 
-1. Coolify resource → **Domains**
-2. Add your domain, e.g. `eudr.yourdomain.com`
-3. Coolify auto-provisions a Traefik reverse proxy entry pointing to the `web` container on port 3000
-4. The `api` container stays internal — it is never exposed to the internet
-
----
-
-## Step 5 — Deploy
-
-Click **Deploy**. Coolify will:
-1. Pull the repo
-2. Build both Docker images (multi-stage — takes 3–5 min first time)
-3. Start `api` first (healthcheck: `GET /health`)
-4. Start `web` once `api` is healthy
-5. Assign your domain via Traefik + auto-SSL (Let's Encrypt)
-
----
-
-## Verifying the deployment
+From Hostinger hPanel → **Terminal** button (top-right), or from your local machine:
 
 ```bash
-# API health (from VPS terminal)
+ssh root@187.124.35.209
+```
+
+---
+
+## Step 2 — Install Docker + Docker Compose
+
+```bash
+# Update packages
+apt-get update && apt-get upgrade -y
+
+# Install Docker (official script)
+curl -fsSL https://get.docker.com | sh
+
+# Verify
+docker --version
+docker compose version
+```
+
+---
+
+## Step 3 — Install Nginx + Certbot
+
+```bash
+apt-get install -y nginx certbot python3-certbot-nginx
+```
+
+---
+
+## Step 4 — Clone the repo
+
+```bash
+cd /opt
+git clone https://github.com/Davedave001/zigotrace-commerce-agent.git
+cd zigotrace-commerce-agent
+```
+
+---
+
+## Step 5 — Create the .env file
+
+```bash
+cp .env.example .env
+nano .env
+```
+
+Fill in every value:
+
+```env
+# Hedera
+HEDERA_OPERATOR_ID=0.0.XXXXX
+HEDERA_OPERATOR_KEY=302e...
+HEDERA_NETWORK=testnet
+HCS_EUDR_TOPIC_ID=0.0.XXXXX
+
+# Specialist agent accounts (can all be same account for testing)
+GEOLOCATION_ACCOUNT=0.0.XXXXX
+DEFORESTATION_ACCOUNT=0.0.XXXXX
+AGRONOMY_ACCOUNT=0.0.XXXXX
+FARM_RECORDS_ACCOUNT=0.0.XXXXX
+COUNTERFEIT_ACCOUNT=0.0.XXXXX
+COMPLIANCE_ACCOUNT=0.0.XXXXX
+REPORT_ACCOUNT=0.0.XXXXX
+
+# AI
+ANTHROPIC_API_KEY=sk-ant-...
+
+# Container networking (keep exactly as-is)
+INTERNAL_API_URL=http://api:3001
+
+# CORS — set to your UI domain
+CORS_ORIGIN=https://commerce-agent.zigotrace.com
+
+# App URL
+APP_URL=https://commerce-agent.zigotrace.com
+```
+
+Save with `Ctrl+O`, exit with `Ctrl+X`.
+
+---
+
+## Step 6 — Build and start both containers
+
+```bash
+docker compose up --build -d
+```
+
+This takes 5–10 minutes on first build (installs npm deps, compiles Next.js, runs esbuild).
+
+Check both are running:
+
+```bash
+docker compose ps
+# Both should show "Up" with a "(healthy)" status after ~30s
+
+# Quick health check
 curl http://localhost:3001/health
 # → {"status":"ok","service":"eudr-guardian-api"}
 
-# ACP service catalog
-curl http://localhost:3001/api/services
-# → {"name":"EUDR Guardian","services":[...7 services...]}
-
-# UI
-curl https://your-domain.com
+curl http://localhost:3000
 # → 200 HTML
 ```
 
 ---
 
-## Container networking diagram
+## Step 7 — Configure Nginx
 
+Create two virtual host files:
+
+### UI — commerce-agent.zigotrace.com
+
+```bash
+nano /etc/nginx/sites-available/commerce-agent.zigotrace.com
 ```
-Internet
-   │
-   ▼
-Traefik (Coolify managed)
-   │
-   ▼  port 3000
-┌──────────────────────────────┐
-│  web container (Next.js)     │
-│  GET /api/* → rewrites to    │
-│  http://api:3001/api/*       │
-└───────────────┬──────────────┘
-                │  Docker internal network
-                ▼  port 3001 (not exposed)
-┌──────────────────────────────┐
-│  api container (Express)     │
-│  • 7 specialist agents       │
-│  • Hedera SDK (HCS + HTS)    │
-│  • Anthropic (claude-haiku)  │
-│  • MPP HBAR split            │
-└──────────────────────────────┘
+
+Paste:
+
+```nginx
+server {
+    listen 80;
+    server_name commerce-agent.zigotrace.com;
+
+    location / {
+        proxy_pass         http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_set_header   Connection 'upgrade';
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+
+        # SSE support (agent activity feed)
+        proxy_buffering    off;
+        proxy_read_timeout 300s;
+    }
+}
+```
+
+### API — api-commerce-agent.zigotrace.com
+
+```bash
+nano /etc/nginx/sites-available/api-commerce-agent.zigotrace.com
+```
+
+Paste:
+
+```nginx
+server {
+    listen 80;
+    server_name api-commerce-agent.zigotrace.com;
+
+    location / {
+        proxy_pass         http://localhost:3001;
+        proxy_http_version 1.1;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_set_header   Connection 'upgrade';
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+
+        # SSE support
+        proxy_buffering    off;
+        proxy_read_timeout 300s;
+    }
+}
+```
+
+Enable both sites:
+
+```bash
+ln -s /etc/nginx/sites-available/commerce-agent.zigotrace.com \
+      /etc/nginx/sites-enabled/
+
+ln -s /etc/nginx/sites-available/api-commerce-agent.zigotrace.com \
+      /etc/nginx/sites-enabled/
+
+# Test config
+nginx -t
+
+# Reload
+systemctl reload nginx
 ```
 
 ---
 
-## Environment variable notes
+## Step 8 — SSL certificates (HTTPS)
 
-**`INTERNAL_API_URL`** must be `http://api:3001` inside Docker Compose because `api` is the service name in `docker-compose.yml`. Next.js reads this at runtime (not build time) to resolve the rewrite destination.
+```bash
+certbot --nginx \
+  -d commerce-agent.zigotrace.com \
+  -d api-commerce-agent.zigotrace.com \
+  --email omondidavid271@gmail.com \
+  --agree-tos \
+  --non-interactive
+```
 
-**`CORS_ORIGIN`** should match your public domain exactly, e.g. `https://eudr.yourdomain.com`. The API container rejects cross-origin POST requests from other origins.
+Certbot rewrites the Nginx configs automatically to add HTTPS and redirect HTTP → HTTPS.
+
+Test auto-renewal:
+
+```bash
+certbot renew --dry-run
+```
+
+---
+
+## Step 9 — Verify end-to-end
+
+```bash
+# API health via public domain
+curl https://api-commerce-agent.zigotrace.com/health
+# → {"status":"ok","service":"eudr-guardian-api"}
+
+# ACP service catalog
+curl https://api-commerce-agent.zigotrace.com/api/services
+
+# UI
+curl -I https://commerce-agent.zigotrace.com
+# → HTTP/2 200
+```
+
+Open `https://commerce-agent.zigotrace.com` in a browser — you should see the EUDR Guardian dashboard.
 
 ---
 
 ## Updating the deployment
 
-Push to `master` on GitHub, then in Coolify:
-- Click **Redeploy** (or enable **Auto Deploy** on push)
+```bash
+cd /opt/zigotrace-commerce-agent
+git pull origin master
+docker compose up --build -d
+```
+
+Docker Compose rebuilds only the changed layers, then does a rolling restart.
 
 ---
 
-## Running locally with Docker Compose
+## Useful commands
 
 ```bash
-cp .env.example .env
-# Fill in your keys in .env
-docker compose up --build
-# UI: http://localhost:3000
-# API: http://localhost:3001/health  (internal, but exposed for local dev)
+# View live logs from both containers
+docker compose logs -f
+
+# View only API logs
+docker compose logs -f api
+
+# Restart a single container
+docker compose restart api
+
+# Stop everything
+docker compose down
+
+# Free disk space from old build layers
+docker system prune -f
 ```
 
-To expose the API port locally for debugging, temporarily add `ports: ["3001:3001"]` under the `api` service in `docker-compose.yml`.
+---
+
+## Architecture on the VPS
+
+```
+                    ┌─────────────────────────────────────────────┐
+                    │  Ubuntu 24.04 VPS (187.124.35.209)          │
+                    │                                             │
+  :443 ──────────── │  Nginx                                      │
+  commerce-agent    │    ├── :3000 ──► web container (Next.js)    │
+  .zigotrace.com    │    │                │                       │
+                    │    │         INTERNAL_API_URL               │
+  :443 ──────────── │    │         http://api:3001                │
+  api-commerce-agent│    │                ▼                       │
+  .zigotrace.com    │    └── :3001 ──► api container (Express)    │
+                    │                   • 7 AI agents             │
+                    │                   • Hedera SDK              │
+                    │                   • Anthropic SDK           │
+                    └─────────────────────────────────────────────┘
+```
+
+The web container talks to the api container via the internal Docker network (`http://api:3001`), never via the public domain. This means even if the API domain is hit publicly, SSE streaming from the UI goes web→docker-network→api (fast), not web→internet→api.

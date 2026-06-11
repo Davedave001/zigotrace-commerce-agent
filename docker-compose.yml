@@ -2,19 +2,20 @@ version: "3.9"
 
 # ── EUDR Guardian — Two-container stack ────────────────────────────────────────
 #
-# Container 1 (api):  Express + Hedera SDK + Anthropic  — port 3001 (internal)
-# Container 2 (web):  Next.js standalone UI              — port 3000 (public)
+# Container 1 (api):  Express + Hedera SDK + Anthropic  — host port 3001
+# Container 2 (web):  Next.js standalone UI              — host port 3000
 #
-# The UI container proxies all /api/* requests to the api container via
-# INTERNAL_API_URL. The api container is never exposed to the internet.
+# Nginx (installed on host) sits in front and routes:
+#   commerce-agent.zigotrace.com      → localhost:3000
+#   api-commerce-agent.zigotrace.com  → localhost:3001
 #
-# Usage (local dev):
-#   cp .env.example .env
-#   docker compose up --build
+# Internal container-to-container traffic still uses the Docker network
+# (INTERNAL_API_URL=http://api:3001) — the web container never hits the
+# public API domain to talk to the api container.
 #
-# Coolify:
-#   Import this repo as a "Docker Compose" project.
-#   Set env vars in the Coolify environment panel.
+# Usage:
+#   cp .env.example .env   # fill in secrets
+#   docker compose up --build -d
 # ────────────────────────────────────────────────────────────────────────────────
 
 services:
@@ -29,9 +30,8 @@ services:
     environment:
       PORT: "3001"
       NODE_ENV: production
-    # Not exposed externally — only reachable inside the Docker network
-    expose:
-      - "3001"
+    ports:
+      - "3001:3001"
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3001/health"]
       interval: 30s
@@ -44,15 +44,13 @@ services:
     build:
       context: .
       dockerfile: apps/web/Dockerfile
-      args:
-        # Passed as build arg so next.config.ts can read it if needed
-        INTERNAL_API_URL: http://api:3001
     restart: unless-stopped
     env_file: .env
     environment:
       PORT: "3000"
       NODE_ENV: production
-      # Runtime env var: Next.js rewrites use this to proxy /api/* → API container
+      # Web container calls api container directly via Docker internal network.
+      # Change this only if moving to separate VMs.
       INTERNAL_API_URL: http://api:3001
     ports:
       - "3000:3000"
