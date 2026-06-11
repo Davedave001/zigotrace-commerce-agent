@@ -19,9 +19,30 @@ export default function HomePage() {
     setEvents([]);
     setReport(null);
 
+    // Express only parses application/json — convert FormData to JSON
+    let jsonBody: Record<string, unknown>;
+    const demo = payload.get("demo");
+    const packageFile = payload.get("package");
+
+    if (demo === "true") {
+      jsonBody = { demo: true };
+    } else if (packageFile instanceof File) {
+      try {
+        jsonBody = { package: JSON.parse(await packageFile.text()) };
+      } catch {
+        alert("Invalid JSON file.");
+        setRunning(false);
+        return;
+      }
+    } else {
+      setRunning(false);
+      return;
+    }
+
     const res = await fetch("/api/guardian", {
       method: "POST",
-      body: payload,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(jsonBody),
     });
 
     if (!res.body) return;
