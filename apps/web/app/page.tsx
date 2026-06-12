@@ -17,13 +17,18 @@ type Tab = "verify" | "remediate";
 
 function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
   return (
-    <section className="relative min-h-[620px] md:min-h-[720px] flex items-center overflow-hidden">
+    <section className="relative min-h-[620px] md:min-h-[720px] flex items-center overflow-hidden bg-[#4B0082]">
+      {/* Hero image — preloaded in layout <head>, eager so it starts immediately */}
       <img
         src="/eudr-compliance-hero.png"
         alt="EUDR Compliance"
+        fetchPriority="high"
+        loading="eager"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover"
       />
-      <div className="absolute inset-0 bg-[#4B0082]/45" />
+      {/* Purple brand overlay — visible instantly even before image loads */}
+      <div className="absolute inset-0 bg-[#4B0082]/50" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 py-20 md:py-28 w-full">
         <div className="max-w-3xl space-y-6">

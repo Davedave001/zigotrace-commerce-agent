@@ -10,6 +10,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        {/* Preload hero image so it's ready before first paint */}
+        <link
+          rel="preload"
+          as="image"
+          href="/eudr-compliance-hero.png"
+          fetchPriority="high"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
