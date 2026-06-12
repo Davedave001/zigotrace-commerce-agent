@@ -15,12 +15,9 @@ const config: Config = {
       },
       fontFamily: {
         sans: [
-          "Avenir Next",
-          "Avenir",
+          "Euclid Circular A",
           "system-ui",
           "-apple-system",
-          "BlinkMacSystemFont",
-          "Segoe UI",
           "sans-serif",
         ],
       },
