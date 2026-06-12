@@ -50,7 +50,7 @@ function ScoreGauge({ score }: { score: number }) {
 function FarmRow({ result }: { result: FarmVerificationResult }) {
   return (
     <tr className="border-t border-gray-100 text-xs">
-      <td className="py-2 pr-3 font-mono text-gray-700">{result.farmId}</td>
+      <td className="py-2 pr-3 font-mono text-black">{result.farmId}</td>
       <td className="py-2 text-center">{STATUS_ICON[result.geolocation]}</td>
       <td className="py-2 text-center">{STATUS_ICON[result.deforestation]}</td>
       <td className="py-2 text-center">{STATUS_ICON[result.agronomy]}</td>
@@ -63,7 +63,7 @@ export function EUDRReportPanel({ report }: Props) {
   if (!report) {
     return (
       <div className="bg-white rounded-xl border border-gray-200 p-6 h-[600px] flex items-center justify-center">
-        <p className="text-gray-400 text-sm text-center">
+        <p className="text-black text-sm text-center">
           EUDR Due Diligence Statement will appear here after verification.
         </p>
       </div>
@@ -73,9 +73,9 @@ export function EUDRReportPanel({ report }: Props) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 flex flex-col h-[600px] overflow-y-auto">
       <div className="px-6 py-4 border-b border-gray-100">
-        <p className="text-xs text-gray-400 font-mono">{report.ddsReference}</p>
+        <p className="text-xs text-black font-mono">{report.ddsReference}</p>
         <h2 className="text-base font-semibold text-gray-900">{report.cooperativeName}</h2>
-        <p className="text-xs text-gray-500">{report.commodity} · {report.cooperativeId}</p>
+        <p className="text-xs text-black">{report.commodity} · {report.cooperativeId}</p>
       </div>
 
       <div className="p-6 space-y-5">
@@ -89,10 +89,10 @@ export function EUDRReportPanel({ report }: Props) {
 
         {/* Farm table */}
         <div>
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Farm Verification</p>
+          <p className="text-xs font-semibold text-black uppercase tracking-wide mb-2">Farm Verification</p>
           <table className="w-full text-xs">
             <thead>
-              <tr className="text-gray-400 text-left">
+              <tr className="text-black text-left">
                 <th className="pb-1 pr-3">Farm ID</th>
                 <th className="pb-1 text-center">GPS</th>
                 <th className="pb-1 text-center">Defor.</th>
@@ -125,10 +125,10 @@ export function EUDRReportPanel({ report }: Props) {
         {/* Recommendations */}
         {report.recommendations.length > 0 && (
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Recommendations</p>
+            <p className="text-xs font-semibold text-black uppercase tracking-wide mb-2">Recommendations</p>
             <ul className="space-y-1">
               {report.recommendations.map((rec, i) => (
-                <li key={i} className="text-xs text-gray-700 flex gap-2">
+                <li key={i} className="text-xs text-black flex gap-2">
                   <span className="text-[#4B0082]">{i + 1}.</span> {rec}
                 </li>
               ))}
@@ -151,17 +151,17 @@ export function EUDRReportPanel({ report }: Props) {
         {/* Hedera proofs */}
         <div className="pt-2 border-t border-gray-100 space-y-1 text-xs">
           <div className="flex justify-between">
-            <span className="text-gray-400">HCS Audit Topic</span>
+            <span className="text-black">HCS Audit Topic</span>
             <span className="font-mono text-[#4B0082]">{report.hcsTopicId}</span>
           </div>
           {report.tracePassTokenId && (
             <div className="flex justify-between">
-              <span className="text-gray-400">TracePass NFT</span>
+              <span className="text-black">TracePass NFT</span>
               <span className="font-mono text-indigo-600">{report.tracePassTokenId}</span>
             </div>
           )}
           <div className="flex justify-between">
-            <span className="text-gray-400">Generated</span>
+            <span className="text-black">Generated</span>
             <span className="text-gray-600">{new Date(report.generatedAt).toLocaleString()}</span>
           </div>
         </div>

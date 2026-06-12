@@ -21,7 +21,7 @@ export function ScanLookupPanel({ onLookup, running, initialId = "" }: Props) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6">
       <h2 className="text-base font-semibold text-gray-900 mb-1">Remediate from EUDR Scan</h2>
-      <p className="text-xs text-gray-500 mb-4">
+      <p className="text-xs text-black mb-4">
         Enter your ZigoTrace scan report ID. Guardian fetches your compliance gaps from{" "}
         <a href="https://zigotrace.com/eudr-scan" target="_blank" rel="noopener noreferrer" className="text-[#4B0082] underline">
           zigotrace.com/eudr-scan
@@ -31,7 +31,7 @@ export function ScanLookupPanel({ onLookup, running, initialId = "" }: Props) {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">
+          <label className="block text-xs font-medium text-black mb-1">
             Scan Report ID
           </label>
           <input
@@ -42,7 +42,7 @@ export function ScanLookupPanel({ onLookup, running, initialId = "" }: Props) {
             disabled={running}
             className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#4B0082] focus:border-transparent disabled:opacity-50"
           />
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-black mt-1">
             {initialId
               ? "ID pre-filled from your scan report email. Click below to start."
               : "Find your Report ID in the results email from zigotrace.com/eudr-scan."}
@@ -60,10 +60,10 @@ export function ScanLookupPanel({ onLookup, running, initialId = "" }: Props) {
 
       {/* Per-dimension pricing */}
       <div className="mt-6 pt-4 border-t border-gray-100">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+        <p className="text-xs font-semibold text-black uppercase tracking-wide mb-2">
           Agent Fees — per gap (below 70%)
         </p>
-        <div className="space-y-1 text-xs text-gray-600">
+        <div className="space-y-1 text-xs text-black">
           {[
             ["Geolocation & Traceability gap", "0.08 HBAR"],
             ["Legality gap", "0.07 HBAR"],

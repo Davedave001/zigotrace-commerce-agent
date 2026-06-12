@@ -49,7 +49,7 @@ function ActionCard({ action }: { action: CorrectiveAction }) {
   return (
     <div className="border border-gray-100 rounded-lg p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold text-gray-700">{action.dimension}</span>
+        <span className="text-xs font-semibold text-black">{action.dimension}</span>
         <span className="font-mono text-xs font-bold" style={{ color: barColor }}>{pct}%</span>
       </div>
 
@@ -61,7 +61,7 @@ function ActionCard({ action }: { action: CorrectiveAction }) {
       {/* Priority actions */}
       <ol className="space-y-1">
         {action.priorityActions.map((step, i) => (
-          <li key={i} className="text-xs text-gray-700 flex gap-2">
+          <li key={i} className="text-xs text-black flex gap-2">
             <span className="text-[#4B0082] font-bold shrink-0">{i + 1}.</span>
             <span>{step}</span>
           </li>
@@ -86,7 +86,7 @@ export function RemediationReportPanel({ report }: Props) {
   if (!report) {
     return (
       <div className="bg-white rounded-xl border border-gray-200 p-6 h-[600px] flex items-center justify-center">
-        <p className="text-gray-400 text-sm text-center">
+        <p className="text-black text-sm text-center">
           Your AI remediation plan will appear here after fetching your scan results.
         </p>
       </div>
@@ -97,7 +97,7 @@ export function RemediationReportPanel({ report }: Props) {
     <div className="bg-white rounded-xl border border-gray-200 flex flex-col h-[600px] overflow-y-auto">
       {/* Header */}
       <div className="px-6 py-4 border-b border-gray-100">
-        <p className="text-xs text-gray-400 font-mono">{report.ddsReference}</p>
+        <p className="text-xs text-black font-mono">{report.ddsReference}</p>
         <h2 className="text-base font-semibold text-gray-900">
           {report.submittedName ? `Remediation Plan — ${report.submittedName}` : "Remediation Plan"}
         </h2>
@@ -108,7 +108,7 @@ export function RemediationReportPanel({ report }: Props) {
         {/* Score */}
         <div className="flex flex-col items-center gap-2">
           <ScoreGauge score={report.overallScore} />
-          <span className={`text-xs font-semibold px-3 py-1 rounded-full ${LEVEL_COLOR[report.overallLevel] ?? "text-gray-700 bg-gray-100"}`}>
+          <span className={`text-xs font-semibold px-3 py-1 rounded-full ${LEVEL_COLOR[report.overallLevel] ?? "text-black bg-gray-100"}`}>
             {report.overallLevel}
           </span>
         </div>
@@ -116,7 +116,7 @@ export function RemediationReportPanel({ report }: Props) {
         {/* Summary */}
         {report.summaryStatement && (
           <div className="bg-[#f8f7f4] rounded-lg p-4">
-            <p className="text-xs text-gray-700 leading-relaxed">{report.summaryStatement}</p>
+            <p className="text-xs text-black leading-relaxed">{report.summaryStatement}</p>
           </div>
         )}
 
@@ -140,24 +140,24 @@ export function RemediationReportPanel({ report }: Props) {
         {/* Hedera proofs + totals */}
         <div className="pt-2 border-t border-gray-100 space-y-1 text-xs">
           <div className="flex justify-between">
-            <span className="text-gray-400">Total HBAR charged</span>
+            <span className="text-black">Total HBAR charged</span>
             <span className="font-mono font-semibold text-[#4B0082]">{report.totalHbarCharged} HBAR</span>
           </div>
           {report.hcsTxId && (
             <div className="flex justify-between">
-              <span className="text-gray-400">Hedera TX</span>
+              <span className="text-black">Hedera TX</span>
               <span className="font-mono text-[#4B0082] truncate max-w-[160px]">{report.hcsTxId}</span>
             </div>
           )}
           {report.tracePassTokenId && (
             <div className="flex justify-between items-center">
-              <span className="text-gray-400">TracePass NFT</span>
+              <span className="text-black">TracePass NFT</span>
               <span className="font-mono text-indigo-600">{report.tracePassTokenId}</span>
             </div>
           )}
           <div className="flex justify-between">
-            <span className="text-gray-400">Generated</span>
-            <span className="text-gray-600">{new Date(report.generatedAt).toLocaleString()}</span>
+            <span className="text-black">Generated</span>
+            <span className="text-black">{new Date(report.generatedAt).toLocaleString()}</span>
           </div>
         </div>
       </div>

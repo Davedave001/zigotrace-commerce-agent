@@ -31,7 +31,7 @@ export function UploadPanel({ onSubmit, running }: Props) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6">
       <h2 className="text-base font-semibold text-gray-900 mb-1">Farm Data Package</h2>
-      <p className="text-xs text-gray-500 mb-4">
+      <p className="text-xs text-black mb-4">
         Upload a JSON cooperative package or run the built-in coffee cooperative demo.
       </p>
 
@@ -57,8 +57,8 @@ export function UploadPanel({ onSubmit, running }: Props) {
             <p className="text-sm text-[#4B0082] font-medium">{fileName}</p>
           ) : (
             <>
-              <p className="text-sm text-gray-600">Drop cooperative JSON here</p>
-              <p className="text-xs text-gray-400 mt-1">or click to browse</p>
+              <p className="text-sm text-black">Drop cooperative JSON here</p>
+              <p className="text-xs text-black mt-1">or click to browse</p>
             </>
           )}
         </div>
@@ -74,7 +74,7 @@ export function UploadPanel({ onSubmit, running }: Props) {
             }}
             className="w-4 h-4 accent-[#4B0082]"
           />
-          <span className="text-sm text-gray-700">
+          <span className="text-sm text-black">
             Use Zigotrace Coffee Cooperative demo dataset
           </span>
         </label>
@@ -91,10 +91,10 @@ export function UploadPanel({ onSubmit, running }: Props) {
 
       {/* Pricing breakdown */}
       <div className="mt-6 pt-4 border-t border-gray-100">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+        <p className="text-xs font-semibold text-black uppercase tracking-wide mb-2">
           Agent Fees
         </p>
-        <div className="space-y-1 text-xs text-gray-600">
+        <div className="space-y-1 text-xs text-black">
           {[
             ["GPS Polygon Verification", "0.05 HBAR"],
             ["Deforestation Risk Scan", "0.10 HBAR"],

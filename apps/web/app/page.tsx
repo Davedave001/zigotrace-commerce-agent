@@ -13,21 +13,18 @@ import type { AgentEvent, EudrReport, RemediationReport } from "./lib/types";
 
 type Tab = "verify" | "remediate";
 
-// ─── Static sections ──────────────────────────────────────────────────────────
+// ─── Hero ──────────────────────────────────────────────────────────────────────
 
 function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
   return (
     <section className="relative min-h-[620px] md:min-h-[720px] flex items-center overflow-hidden">
-      {/* Background image */}
       <img
-        src="/eudr-hero.png"
+        src="/eudr-compliance-hero.png"
         alt="EUDR Compliance"
         className="absolute inset-0 w-full h-full object-cover"
       />
-      {/* Purple overlay */}
       <div className="absolute inset-0 bg-[#4B0082]/45" />
 
-      {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 py-20 md:py-28 w-full">
         <div className="max-w-3xl space-y-6">
           <p className="text-sm font-medium text-white/90 uppercase tracking-widest">
@@ -42,12 +39,23 @@ function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
             Statement before the December 2026 enforcement deadline.
           </p>
 
-          <button
-            onClick={onGetStarted}
-            className="bg-[#4B0082] hover:bg-[#3A0066] border border-white/30 text-white font-semibold px-8 py-3 rounded-md transition-colors text-sm"
-          >
-            Start EUDR Verification
-          </button>
+          {/* CTAs */}
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={onGetStarted}
+              className="bg-[#4B0082] hover:bg-[#3A0066] border border-white/30 text-white font-semibold px-8 py-3 rounded-md transition-colors text-sm"
+            >
+              Start EUDR Verification
+            </button>
+            <a
+              href="https://zigotrace.com/eudr-scan"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white text-[#4B0082] hover:bg-white/90 font-semibold px-8 py-3 rounded-md transition-colors text-sm"
+            >
+              Start Your Free EUDR Quick Scan
+            </a>
+          </div>
 
           <CountdownTimer />
         </div>
@@ -55,6 +63,8 @@ function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
     </section>
   );
 }
+
+// ─── What is EUDR ─────────────────────────────────────────────────────────────
 
 function WhatIsEudrSection() {
   const eudrPoints = [
@@ -85,7 +95,7 @@ function WhatIsEudrSection() {
                 <div className="w-10 h-10 rounded-full bg-[#4B0082] flex items-center justify-center shrink-0">
                   <span className="text-white text-sm font-semibold">{i + 1}</span>
                 </div>
-                <p className="text-sm font-medium text-[#4B0082] leading-relaxed pt-2">{point}</p>
+                <p className="text-sm font-medium text-black leading-relaxed pt-2">{point}</p>
               </div>
             ))}
           </div>
@@ -101,7 +111,7 @@ function WhatIsEudrSection() {
                 <div className="w-10 h-10 rounded-full bg-[#4B0082] flex items-center justify-center shrink-0">
                   <span className="text-white text-sm font-semibold">{i + 1}</span>
                 </div>
-                <p className="text-sm font-medium text-[#4B0082] leading-relaxed pt-2">{point}</p>
+                <p className="text-sm font-medium text-black leading-relaxed pt-2">{point}</p>
               </div>
             ))}
           </div>
@@ -111,12 +121,14 @@ function WhatIsEudrSection() {
   );
 }
 
+// ─── What You'll Get ──────────────────────────────────────────────────────────
+
 function WhatYoullGetSection({ onGetStarted }: { onGetStarted: () => void }) {
   const cards: Array<
     | { type: "image"; src: string; alt: string }
     | { type: "text"; title: string; body: string }
   > = [
-    { type: "image", src: "/eudr-wyg-1.png", alt: "EUDR farm compliance" },
+    { type: "image", src: "/eudr-farm-compliance.png",      alt: "Farm compliance verification" },
     {
       type: "text",
       title: "7-Agent AI Compliance Suite",
@@ -125,57 +137,59 @@ function WhatYoullGetSection({ onGetStarted }: { onGetStarted: () => void }) {
     {
       type: "text",
       title: "HBAR-Powered Agent Commerce",
-      body: "Each specialist agent is paid in HBAR via MPP multi-party payment split. Transparent, on-chain, and fully auditable.",
+      body: "Each specialist agent is paid in HBAR via MPP multi-party payment split. Transparent, on-chain, and fully auditable on Hedera.",
     },
-    { type: "image", src: "/eudr-wyg-2.png", alt: "Hedera blockchain payments" },
-    { type: "image", src: "/eudr-wyg-3.png", alt: "Remediation plan" },
+    { type: "image", src: "/hedera-blockchain-payment.png", alt: "Hedera blockchain payments" },
+    { type: "image", src: "/remediation-plan.png",          alt: "AI corrective action plan" },
     {
       type: "text",
       title: "AI Corrective Action Plans",
-      body: "Guardian fetches your EUDR scan results from zigotrace.com and builds a prioritised remediation plan with ZigoTrace service links.",
+      body: "Guardian fetches your EUDR scan results from zigotrace.com and builds a prioritised remediation plan with direct ZigoTrace service links.",
     },
     {
       type: "text",
       title: "TracePass NFT Certification",
       body: "Farms scoring ≥65% receive a TracePass NFT minted on Hedera Token Service — a portable, verifiable EUDR compliance badge.",
     },
-    { type: "image", src: "/eudr-wyg-1.png", alt: "TracePass certificate" },
+    { type: "image", src: "/trace-pass-certificate.png",    alt: "TracePass NFT certificate" },
   ];
 
   return (
     <section className="bg-[#F6F7F1] py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
-        {/* Section header */}
         <div className="grid lg:grid-cols-2 items-center mb-8 gap-6">
           <h2 className="text-xl md:text-2xl font-semibold text-[#4B0082]">
             What You&apos;ll Get
           </h2>
-          <div className="lg:text-right">
+          <div className="lg:text-right flex lg:justify-end gap-3 flex-wrap">
             <button
               onClick={onGetStarted}
               className="bg-[#4B0082] hover:bg-[#3A0066] text-white font-semibold px-8 py-3 rounded-md transition-colors text-sm"
             >
               Start Verification
             </button>
+            <a
+              href="https://zigotrace.com/eudr-scan"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-[#4B0082] text-[#4B0082] hover:bg-[#4B0082] hover:text-white font-semibold px-8 py-3 rounded-md transition-colors text-sm"
+            >
+              Free Quick Scan
+            </a>
           </div>
         </div>
 
-        {/* Checkerboard card grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-5">
           {cards.map((card, i) =>
             card.type === "image" ? (
               <div key={i} className="h-56 md:h-64 overflow-hidden rounded-lg bg-[#4B0082]/10">
-                <img
-                  src={card.src}
-                  alt={card.alt}
-                  className="w-full h-full object-cover"
-                />
+                <img src={card.src} alt={card.alt} className="w-full h-full object-cover" />
               </div>
             ) : (
               <div key={i} className="bg-white rounded-lg p-5 md:p-6 flex flex-col justify-between">
                 <div>
                   <h3 className="text-lg font-semibold text-[#4B0082] mb-3">{card.title}</h3>
-                  <p className="text-sm font-medium text-[#4B0082] leading-relaxed">{card.body}</p>
+                  <p className="text-sm font-medium text-black leading-relaxed">{card.body}</p>
                 </div>
                 <button
                   onClick={onGetStarted}
@@ -192,7 +206,7 @@ function WhatYoullGetSection({ onGetStarted }: { onGetStarted: () => void }) {
   );
 }
 
-// ─── Tool section ─────────────────────────────────────────────────────────────
+// ─── Main page ────────────────────────────────────────────────────────────────
 
 function HomeContent() {
   const searchParams = useSearchParams();
@@ -271,11 +285,6 @@ function HomeContent() {
     await streamSse("/api/remediation/from-scan", { submissionId });
   }
 
-  function handleGetStarted() {
-    setTab("verify");
-    scrollToTool();
-  }
-
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -284,27 +293,28 @@ function HomeContent() {
           <h1 className="text-xl font-bold text-white">EUDR Guardian</h1>
           <p className="text-xs text-white/75">Hedera Food Traceability Commerce Agent</p>
         </div>
-        <WalletWidget account={walletAccount} onConnect={setWalletAccount} />
+        <div className="flex items-center gap-3">
+          <a
+            href="https://zigotrace.com/eudr-scan"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:block text-xs font-medium text-white/85 hover:text-white underline underline-offset-2 transition-colors"
+          >
+            Free Quick Scan →
+          </a>
+          <WalletWidget account={walletAccount} onConnect={setWalletAccount} />
+        </div>
       </header>
 
-      {/* Hero */}
+      {/* 1. Hero */}
       <HeroSection onGetStarted={() => { setTab("verify"); scrollToTool(); }} />
 
-      {/* What is EUDR */}
-      <WhatIsEudrSection />
-
-      {/* What You'll Get */}
-      <WhatYoullGetSection onGetStarted={handleGetStarted} />
-
-      {/* Tool section */}
-      <section id="tool-section" className="bg-white py-16 md:py-20">
+      {/* 2. Run Verification — immediately below hero */}
+      <section id="tool-section" className="bg-white py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-6 md:px-10">
-          {/* Section heading */}
-          <div className="mb-8">
-            <h2 className="text-xl md:text-2xl font-semibold text-[#4B0082]">
-              Run Verification
-            </h2>
-            <p className="text-sm text-gray-500 mt-1">
+          <div className="mb-6">
+            <h2 className="text-xl md:text-2xl font-semibold text-[#4B0082]">Run Verification</h2>
+            <p className="text-sm text-black mt-1">
               Upload farm data for a full EUDR check, or fetch your scan report to get a corrective action plan.
             </p>
           </div>
@@ -314,9 +324,7 @@ function HomeContent() {
             <button
               onClick={() => setTab("verify")}
               className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-                tab === "verify"
-                  ? "bg-[#4B0082] text-white"
-                  : "text-gray-500 hover:text-[#4B0082]"
+                tab === "verify" ? "bg-[#4B0082] text-white" : "text-black hover:text-[#4B0082]"
               }`}
             >
               Farm Verification
@@ -324,16 +332,13 @@ function HomeContent() {
             <button
               onClick={() => setTab("remediate")}
               className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-                tab === "remediate"
-                  ? "bg-[#4B0082] text-white"
-                  : "text-gray-500 hover:text-[#4B0082]"
+                tab === "remediate" ? "bg-[#4B0082] text-white" : "text-black hover:text-[#4B0082]"
               }`}
             >
               Remediate Scan
             </button>
           </div>
 
-          {/* 3-column grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-1">
               {tab === "verify" ? (
@@ -356,12 +361,16 @@ function HomeContent() {
         </div>
       </section>
 
+      {/* 3. What is EUDR */}
+      <WhatIsEudrSection />
+
+      {/* 4. What You'll Get */}
+      <WhatYoullGetSection onGetStarted={() => { setTab("verify"); scrollToTool(); }} />
+
       {/* Footer */}
       <footer className="bg-[#4B0082] text-white/75 text-xs text-center py-6 px-6">
         <p>© {new Date().getFullYear()} ZigoTrace · EUDR Guardian · Powered by Hedera Hashgraph</p>
-        <p className="mt-1">
-          HBAR payments settle on Hedera mainnet · HCS audit trail · TracePass NFT on HTS
-        </p>
+        <p className="mt-1">HBAR payments settle on Hedera mainnet · HCS audit trail · TracePass NFT on HTS</p>
       </footer>
     </div>
   );
