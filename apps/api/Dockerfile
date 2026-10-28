@@ -1,5 +1,5 @@
 # ---- Stage 1: install deps ----
-FROM node:20-alpine AS deps
+FROM node:22-alpine AS deps
 WORKDIR /app
 
 COPY .npmrc ./
@@ -12,7 +12,7 @@ COPY packages/mpp/package.json ./packages/mpp/
 RUN npm ci --legacy-peer-deps
 
 # ---- Stage 2: bundle ----
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -34,7 +34,7 @@ RUN node_modules/.bin/esbuild apps/api/src/server.ts \
   --loader:.ts=ts
 
 # ---- Stage 3: production runner ----
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
